@@ -1,5 +1,4 @@
 use anyhow::{Error, bail};
-use std::io::{BufRead, BufReader};
 
 const IS_PART_TWO: bool = true;
 
@@ -34,12 +33,10 @@ fn normalize(mut cur_pos: i64, mut val: i64) -> (i64, usize) {
 }
 
 fn main() -> Result<(), Error> {
-    let rdr = BufReader::new(std::io::stdin());
-
     let mut cur_pos = 50;
     let mut tot_num_zero = 0;
 
-    for line in rdr.lines() {
+    for line in std::io::stdin().lines() {
         let line = line?;
 
         let val = if let Some(rest) = line.as_str().strip_prefix("L") {
