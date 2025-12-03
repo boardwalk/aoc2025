@@ -5,6 +5,7 @@ resolver = "2"
 [workspace.dependencies]
 anyhow = "1"
 aoc_common = { path = "crates/aoc_common" }
+ndarray = { version = "0.16", default-features = false }
 
 # debug = false is roughly twice as fast the default
 # so it you don't use stack traces and such, go for it
