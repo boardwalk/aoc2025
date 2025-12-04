@@ -44,6 +44,15 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "aoc_common",
+ "ndarray",
+]
+
+[[package]]
+name = "day04"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "aoc_common",
 ]
 
 [[package]]
