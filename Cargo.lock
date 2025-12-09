@@ -66,6 +66,16 @@ name = "day06"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "aoc_common",
+]
+
+[[package]]
+name = "day07"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "aoc_common",
+ "ndarray",
 ]
 
 [[package]]
