@@ -87,6 +87,42 @@ dependencies = [
 ]
 
 [[package]]
+name = "day09"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "aoc_common",
+ "ndarray",
+]
+
+[[package]]
+name = "day10"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "aoc_common",
+ "ndarray",
+]
+
+[[package]]
+name = "day11"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "aoc_common",
+ "ndarray",
+]
+
+[[package]]
+name = "day12"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "aoc_common",
+ "ndarray",
+]
+
+[[package]]
 name = "matrixmultiply"
 version = "0.3.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"

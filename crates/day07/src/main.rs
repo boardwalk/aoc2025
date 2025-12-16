@@ -19,7 +19,7 @@ fn find_start_pos(grid: &ndarray::Array2<char>) -> Option<(i64, i64)> {
     None
 }
 
-fn get_grid(grid: &ndarray::Array2<char>, row: i64, col: i64) -> Option<char> {
+fn get_grid(grid: &ndarray::Array2<char>, (row, col): (i64, i64)) -> Option<char> {
     let Ok(row) = usize::try_from(row) else {
         return None;
     };
@@ -29,6 +29,14 @@ fn get_grid(grid: &ndarray::Array2<char>, row: i64, col: i64) -> Option<char> {
     };
 
     grid.get((row, col)).copied()
+}
+
+fn is_empty(grid: &ndarray::Array2<char>, (row, col): (i64, i64)) -> bool {
+    let Some(value) = get_grid(grid, (row, col)) else {
+        return true;
+    };
+
+    value == '.'
 }
 
 fn main() -> Result<(), Error> {
@@ -45,30 +53,36 @@ fn main() -> Result<(), Error> {
     let mut beams = std::collections::VecDeque::new();
     beams.push_back(start_pos);
 
-    let mut num_splits = 0;
     while let Some((row, col)) = beams.pop_front() {
-        println!("beam {}, {}", row, col);
+        annot_grid[(row as usize, col as usize)] = '|';
 
-        let Some(value) = get_grid(&grid, row, col) else {
+        let Some(value) = get_grid(&grid, (row, col)) else {
             continue;
         };
 
-        annot_grid[(row as usize, col as usize)] = '|';
-
         if value == '^' {
             println!("hit splitter");
-            beams.push_back((row, col - 1));
-            beams.push_back((row, col + 1));
-            num_splits += 1;
+            let left = (row, col - 1);
+            let right = (row, col + 1);
+
+            if is_empty(&grid, left) && is_empty(&grid, right) {
+                beams.push_back(left);
+                beams.push_back(right);
+            }
         } else if value == 'S' || value == '.' {
+            let down = (row + 1, col);
             println!("normal advance");
-            beams.push_back((row + 1, col));
+            if get_grid(&grid, down).is_some() {
+                beams.push_back(down);
+            }
         } else {
             bail!("unknown grid char");
         }
-    }
 
-    println!("num_splits = {num_splits}");
+        // print_grid(&annot_grid);
+
+        // std::thread::sleep(std::time::Duration::from_millis(50));
+    }
 
     print_grid(&annot_grid);
 
