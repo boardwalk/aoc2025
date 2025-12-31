@@ -12,7 +12,8 @@ struct Machine {
 fn parse_machines(input: impl std::io::BufRead) -> Result<Vec<Machine>, Error> {
     let mut machines = Vec::new();
 
-    let re = Regex::new(r"^\[(.*?)\](.*)\{([^}]+)\}$").unwrap();
+    let line_re = Regex::new(r"^\[(.*?)\](.*)\{([^}]+)\}$").unwrap();
+    let wiring_re = Regex::new(r"\(([^)]+)\)").unwrap();
 
     for line in input.lines() {
         let line = line?;
@@ -20,16 +21,15 @@ fn parse_machines(input: impl std::io::BufRead) -> Result<Vec<Machine>, Error> {
             continue;
         }
 
-        let caps = re
+        let caps = line_re
             .captures(&line)
             .ok_or_else(|| Error::msg("line does not match expected pattern"))?;
 
         let lights_section = caps.get(1).unwrap().as_str();
         let buttons_section = caps.get(2).unwrap().as_str();
-        let jolt_section = caps.get(3).unwrap().as_str();
+        let joltage_section = caps.get(3).unwrap().as_str();
         let lights: Vec<bool> = lights_section.chars().map(|c| c == '#').collect();
 
-        let wiring_re = Regex::new(r"\(([^)]+)\)").unwrap();
         let mut buttons = Vec::new();
 
         for m in wiring_re.find_iter(buttons_section) {
@@ -39,7 +39,7 @@ fn parse_machines(input: impl std::io::BufRead) -> Result<Vec<Machine>, Error> {
                 .map(|s| {
                     s.trim()
                         .parse()
-                        .map_err(|_| Error::msg("failed to parse light index"))
+                        .map_err(|_| Error::msg("failed to parse light indices"))
                 })
                 .collect::<Result<_, _>>()?;
 
@@ -53,7 +53,7 @@ fn parse_machines(input: impl std::io::BufRead) -> Result<Vec<Machine>, Error> {
             buttons.push(light_indices);
         }
 
-        let joltages: Vec<usize> = jolt_section
+        let joltages: Vec<usize> = joltage_section
             .split(',')
             .map(|s| {
                 s.trim()
